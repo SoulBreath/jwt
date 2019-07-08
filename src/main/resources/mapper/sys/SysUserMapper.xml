@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：到全路径 -->
+<mapper namespace="com.example.jwt.modules.user.dao.SysUserDao">
+
+    <select id="findUserById" resultType="com.example.jwt.modules.user.entity.SysUserEntity">
+      select * from sys_user where user_id = #{userId}
+    </select>
+
+    <select id="findUserByMobile" resultType="com.example.jwt.modules.user.entity.SysUserEntity">
+        select * from sys_user where  mobile = #{mobile}
+    </select>
+
+    <insert id="registerUser" parameterType="com.example.jwt.modules.user.entity.SysUserEntity"
+            useGeneratedKeys="true" keyColumn="user_id" keyProperty="userId">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mobile != null">`mobile`,</if>
+            <if test="nickname != null">`nickname`,</if>
+            <if test="password != null">`password`</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mobile != null">#{mobile},</if>
+            <if test="nickname != null">#{nickname},</if>
+            <if test="password != null">#{password},</if>
+        </trim>
+    </insert>
+
+    <!--更新用户信息-->
+    <update id="updateUser" parameterType="com.example.jwt.modules.user.entity.SysUserEntity">
+        update sys_user
+        <set>
+            <if test="mobile != null">`mobile` = #{mobile},</if>
+            <if test="nickname != null">`nickname` = #{nickname},</if>
+            <if test="password != null">`password` = #{password}</if>
+        </set>
+        where `user_id` = #{userId}
+    </update>
+</mapper>
