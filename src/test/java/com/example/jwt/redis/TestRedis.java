@@ -30,12 +30,12 @@ public class TestRedis {
     @Test
     public void testString() throws IOException {
         SysUserEntity user1 = new SysUserEntity();
-        user1.setUserId(1L);
+        user1.setId(1L);
         user1.setMobile("11111111111");
         user1.setPassword("999999");
         user1.setNickname("jack");
         SysUserEntity user2 = new SysUserEntity();
-        user2.setUserId(2L);
+        user2.setId(2L);
         user2.setMobile("22222222222");
         user2.setPassword("666666");
         user2.setNickname("lucy");

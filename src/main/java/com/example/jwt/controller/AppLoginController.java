@@ -8,10 +8,7 @@ import com.example.jwt.common.utils.JwtUtil;
 import com.example.jwt.common.utils.PwdUtil;
 import com.example.jwt.common.utils.R;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,10 +29,10 @@ public class AppLoginController {
      * 用户登录
      */
     @PostMapping("/login")
-    public R login(String mobile, String password){
+    public R login(@RequestBody SysUserEntity sysUserEntity){
 
         // 从数据库中取用户信息
-        SysUserEntity user = sysUserService.findUserByMobile(mobile);
+        SysUserEntity user = sysUserService.findUserByAccount(sysUserEntity.getAccount());
 
         // 用户信息为空
         if (null == user){
@@ -43,12 +40,12 @@ public class AppLoginController {
         }
 
         // 密码输入错误
-        if (!PwdUtil.verify(password,user.getPassword())){
+        if (!PwdUtil.verify(sysUserEntity.getPassword(),user.getPassword())){
             return R.error(-2, "密码输入错误!") ;
         }
 
         // 返回token
-        return R.ok("登录成功！").put("token", jwtUtil.generateToken(user.getUserId().toString()));
+        return R.ok("登录成功！").put("token", jwtUtil.generateToken(user.getId().toString()));
     }
 
     /**
@@ -63,7 +60,7 @@ public class AppLoginController {
     public R updatePwd(@LoginUser SysUserEntity user, @RequestParam String password, HttpServletRequest request){
         SysUserEntity userInfo = new SysUserEntity();
         password = PwdUtil.generate(password);
-        userInfo.setUserId(user.getUserId());
+        userInfo.setId(user.getId());
         userInfo.setPassword(password);
 
         // 更新密码并返回结果

@@ -30,7 +30,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Resource
     private SysUserService sysUserService;
 
-    public static final String USER_KEY = "userId";
+    public static final String USER_KEY = "Id";
     // 方法开始时间
     public Long startTime = 0L;
 
@@ -77,18 +77,18 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
 
         // 取出userId
-        Long userId = Long.valueOf(claims.getSubject());
+        Long id = Long.valueOf(claims.getSubject());
         // 设置userId到request中,后续根据userId获取用户信息
-        request.setAttribute(USER_KEY,userId);
+        request.setAttribute(USER_KEY,id);
 
         // 判断token是否在黑名单(修改密码或退出登录的黑名单)中
-        String wasteToken = (String) redisUtil.get(BlacklistUtil.BLACKLIST_KEY + userId);
+        String wasteToken = (String) redisUtil.get(BlacklistUtil.BLACKLIST_KEY + id);
         if (null != wasteToken && wasteToken.equals(token)){
             throw new RuntimeException("当前用户已退出,请重新登录!");
         }
 
         // 根据userId查询用户信息
-        SysUserEntity user = sysUserService.findUserById(userId);
+        SysUserEntity user = sysUserService.findUserById(id);
         if (null == user){
             throw new RuntimeException("当前用户不存在!");
         }

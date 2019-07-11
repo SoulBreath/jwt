@@ -9,20 +9,20 @@
       select * from sys_user where user_id = #{userId}
     </select>
 
-    <select id="findUserByMobile" resultType="com.example.jwt.modules.user.entity.SysUserEntity">
-        select * from sys_user where  mobile = #{mobile}
+    <select id="findUserByAccount" resultType="com.example.jwt.modules.user.entity.SysUserEntity">
+        select * from sys_user where  mobile = #{account} or account = #{account} or email = #{account}
     </select>
 
     <insert id="registerUser" parameterType="com.example.jwt.modules.user.entity.SysUserEntity"
             useGeneratedKeys="true" keyColumn="user_id" keyProperty="userId">
         insert into sys_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="mobile != null">`mobile`,</if>
+            <if test="account != null">`account`,</if>
             <if test="nickname != null">`nickname`,</if>
             <if test="password != null">`password`</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="mobile != null">#{mobile},</if>
+            <if test="account != null">#{account},</if>
             <if test="nickname != null">#{nickname},</if>
             <if test="password != null">#{password},</if>
         </trim>
@@ -32,9 +32,10 @@
     <update id="updateUser" parameterType="com.example.jwt.modules.user.entity.SysUserEntity">
         update sys_user
         <set>
-            <if test="mobile != null">`mobile` = #{mobile},</if>
             <if test="nickname != null">`nickname` = #{nickname},</if>
             <if test="password != null">`password` = #{password}</if>
+            <if test="mobile != null">`password` = #{mobile}</if>
+            <if test="email != null">`password` = #{email}</if>
         </set>
         where `user_id` = #{userId}
     </update>

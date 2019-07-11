@@ -5,6 +5,7 @@ import com.example.jwt.common.utils.R;
 import com.example.jwt.modules.user.entity.SysUserEntity;
 import com.example.jwt.modules.user.service.SysUserService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,16 +32,16 @@ public class RegisterController {
      * @return
      */
     @PostMapping("/pwdRegister")
-    public R register(SysUserEntity user){
+    public R register(@RequestBody SysUserEntity user){
 
         // 判断用户名和密码是否为空
-        if (null == user.getMobile() && null == user.getPassword()){
-            return R.error(-1,"用户名和密码不能为空!");
+        if (null == user.getAccount() && null == user.getPassword()){
+            return R.error(-1,"用户名或密码不能为空!");
         }
 
-        // 判断手机号是否已注册
-        if(null != sysUserService.findUserByMobile(user.getMobile())){
-            return R.error(-2, "该手机号已注册!");
+        // 判断账号是否已注册
+        if(null != sysUserService.findUserByAccount(user.getAccount())){
+            return R.error(-2, "该账号已注册!");
         }
 
         // 加密密码

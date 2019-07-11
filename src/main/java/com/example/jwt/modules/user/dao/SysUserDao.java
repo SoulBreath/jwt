@@ -14,10 +14,10 @@ public interface SysUserDao {
 
     /**
      * 根据账号密码取用户信息
-     * @param mobile 账号
+     * @param account 账号
      * @return SysUserEntity 用户信息
      */
-    SysUserEntity findUserByMobile(String mobile);
+    SysUserEntity findUserByAccount(String account);
 
     /**
      * 用户注册

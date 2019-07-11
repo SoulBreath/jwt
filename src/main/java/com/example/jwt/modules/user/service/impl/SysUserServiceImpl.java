@@ -43,10 +43,11 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    @Cacheable(value = "userInfo", key = "#mobile + 'findUserByMobile'", unless="#result == null")
-    public SysUserEntity findUserByMobile(String mobile) {
+    @Cacheable(value = "userInfo", key = "#account + 'findUserByAccount'", unless="#result == null")
+    public SysUserEntity findUserByAccount(String account) {
         log.info("没有走缓存!");
-        return sysUserDao.findUserByMobile(mobile);
+        SysUserEntity user = sysUserDao.findUserByAccount(account);
+        return user;
     }
 
     @Override
@@ -55,7 +56,7 @@ public class SysUserServiceImpl implements SysUserService {
             // 注册用户
             sysUserDao.registerUser(user);
             // 返回token用于直接登录
-            return jwtUtil.generateToken(user.getUserId().toString());
+            return jwtUtil.generateToken(user.getId().toString());
         }catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -65,14 +66,16 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @Caching(evict = {
             @CacheEvict(value = {"userInfo"}, key = "#user.userId + 'findUserById'"),
-            @CacheEvict(value = {"userInfo"}, key = "#user.mobile + 'findUserByMobile'")
+            @CacheEvict(value = {"userInfo"}, key = "#user.account + 'findUserByAccount'"),
+            @CacheEvict(value = {"userInfo"}, key = "#user.mobile + 'findUserByAccount'"),
+            @CacheEvict(value = {"userInfo"}, key = "#user.email + 'findUserByAccount'")
             })
     public R updateUser(SysUserEntity user, String token) {
         try {
             sysUserDao.updateUser(user);
             // 如果是修改密码
             if (null != user.getPassword()){
-                blacklistUtil.joinBlacklist(user.getUserId(), token);
+                blacklistUtil.joinBlacklist(user.getId(), token);
             }
             return R.ok("修改密码成功！");
         } catch (Exception e) {

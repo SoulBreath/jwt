@@ -19,12 +19,12 @@ public class SysUserEntity implements Serializable {
     /**
      * 用户ID
      */
-    private Long userId;
+    private Long id;
 
     /**
-     * 手机号
+     * 账号
      */
-    private String mobile;
+    private String account;
 
     /**
      * 昵称
@@ -35,5 +35,15 @@ public class SysUserEntity implements Serializable {
      * 密码
      */
     private String password;
+
+    /**
+     * 手机号
+     */
+    private String mobile;
+
+    /**
+     * 邮箱
+     */
+    private String email;
 
 }

@@ -14,10 +14,10 @@ public interface SysUserService {
 
     /**
      * 根据账号查询用户
-     * @param mobile 用户账号
+     * @param account 用户账号
      * @return SysUserEntity 用户信息
      */
-    SysUserEntity findUserByMobile(String mobile);
+    SysUserEntity findUserByAccount(String account);
 
     /**
      * 用户注册
