@@ -73,4 +73,4 @@ jwt:
 logging:
   file: sb.log
   level:
-    root: debug
+    root: info
